@@ -2,17 +2,10 @@
 # Install newest stable version of OpenSCAP.
 # Package openscap-utils provides oscap.ssh (not needed on remote machines).
 
-- name: Add OpenSCAP yum repo
-  copy: src=openscapmaint-openscap-latest-epel-7.repo
-    dest=/etc/yum.repos.d/
-    owner=root group=root mode=0644
-
-- name: Install OpenSCAP packages on all machines.
-  yum: pkg="{{ item }}" state=installed
-  with_items:
-    - openscap-scanner
-    - openscap-utils
-
+- name: Install openscap
+  yum:
+    name: openscap-scanner
+    
 # If oscap_user is defined, create the account and grant it sudo capability.
 # FIXME: Use a templated sudoers.d file so oscap_user can be insserted.
 
