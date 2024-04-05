@@ -1,0 +1,23 @@
+---
+- name: Install openscap
+  yum:
+    name: openscap-scanner
+  become: true
+
+- name: Install openscap guide
+  yum:
+    name: scap-security-guide
+  become: true
+
+- name: Scan and fix
+  shell: oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_anssi_bp28_intermediary --results scan-xccdf-results.xml /usr/share/xml/scap/ssg/content/ssg-rhel8-ds.xml
+  become: true
+  ignore_errors: true
+  
+- name: Convert scan report
+  shell: oscap xccdf generate report scan-xccdf-results.xml > scan-xccdf-report.html
+
+- name: Get report locally
+  fetch:
+    src: scan-xccdf-report.html
+    dest: scan-xccdf-report.html
